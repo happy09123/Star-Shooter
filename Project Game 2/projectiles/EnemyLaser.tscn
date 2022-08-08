@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/star-shooter-assets/enemy-laser.png" type="Texture" id=1]
+[ext_resource path="res://projectiles/Laser.tscn" type="PackedScene" id=2]
+[ext_resource path="res://projectiles/EnemyLaser.gd" type="Script" id=3]
+
+[node name="EnemyLaser" instance=ExtResource( 2 )]
+script = ExtResource( 3 )
+
+[node name="Sprite" parent="." index="0"]
+texture = ExtResource( 1 )
+
+[connection signal="area_entered" from="." to="." method="_on_EnemyLaser_area_entered"]

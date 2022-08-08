@@ -1,0 +1,87 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/star-shooter-assets/kenvector_future.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://fonts/font_54.tres" type="DynamicFont" id=2]
+[ext_resource path="res://UI/MainMenu.gd" type="Script" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 40
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 40
+font_data = ExtResource( 1 )
+
+[sub_resource type="Gradient" id=4]
+offsets = PoolRealArray( 0, 0.00621118, 0.310559 )
+colors = PoolColorArray( 1, 1, 1, 0.939855, 1, 1, 1, 0.235294, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=5]
+gradient = SubResource( 4 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = -200.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 3.0
+scale_random = 0.5
+color_ramp = SubResource( 5 )
+
+[node name="MainMenu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="Title" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -254.5
+margin_top = -190.0
+margin_right = 254.5
+margin_bottom = -128.0
+custom_fonts/font = ExtResource( 2 )
+text = "STAR SHOOTER"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -88.5
+margin_top = -53.0
+margin_right = 88.5
+margin_bottom = 53.0
+custom_constants/separation = 20
+
+[node name="StartButton" type="Button" parent="VBoxContainer"]
+margin_right = 177.0
+margin_bottom = 51.0
+custom_fonts/font = SubResource( 1 )
+text = "START"
+
+[node name="QuitButton" type="Button" parent="VBoxContainer"]
+margin_top = 71.0
+margin_right = 177.0
+margin_bottom = 122.0
+custom_fonts/font = SubResource( 2 )
+text = "QUIT"
+
+[node name="Particles2D" type="Particles2D" parent="."]
+position = Vector2( 280, 480 )
+amount = 60
+lifetime = 3.0
+preprocess = 5.0
+process_material = SubResource( 3 )
+
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_QuitButton_pressed"]

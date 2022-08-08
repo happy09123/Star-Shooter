@@ -1,0 +1,109 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://assets/star-shooter-assets/background.png" type="Texture" id=1]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Enemies/ShootingEnemy.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Enemies/DiverEnemy.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Enemies/EnemySpawner.gd" type="Script" id=5]
+[ext_resource path="res://World.gd" type="Script" id=6]
+[ext_resource path="res://Enemies/NormalEnemy.tscn" type="PackedScene" id=7]
+[ext_resource path="res://UI/HUD.tscn" type="PackedScene" id=8]
+[ext_resource path="res://assets/star-shooter-assets/bg_music.ogg" type="AudioStream" id=9]
+[ext_resource path="res://assets/star-shooter-assets/star_texture.png" type="Texture" id=10]
+[ext_resource path="res://effects/Explosion.tscn" type="PackedScene" id=11]
+
+[sub_resource type="ParticlesMaterial" id=2]
+emission_shape = 2
+emission_box_extents = Vector3( 1, 270, 1 )
+flag_disable_z = true
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = -1000.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 13.8068, 15.6 )
+
+[node name="World" type="Node2D"]
+script = ExtResource( 6 )
+
+[node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
+volume_db = -10.0
+autoplay = true
+
+[node name="Background" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 540, 960 )
+
+[node name="Stars" type="Particles2D" parent="."]
+position = Vector2( 280, 0 )
+rotation = 4.71239
+lifetime = 1.5
+preprocess = 3.0
+process_material = SubResource( 2 )
+texture = ExtResource( 10 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 268, 823 )
+
+[node name="EnemySpawner" type="Node2D" parent="."]
+position = Vector2( 0, -130 )
+script = ExtResource( 5 )
+enemies = [ ExtResource( 7 ), ExtResource( 4 ), ExtResource( 3 ) ]
+
+[node name="SpawnPositions" type="Node2D" parent="EnemySpawner"]
+
+[node name="SpawnPosition_01" type="Position2D" parent="EnemySpawner/SpawnPositions"]
+position = Vector2( 70, 0 )
+
+[node name="SpawnPosition_02" type="Position2D" parent="EnemySpawner/SpawnPositions"]
+position = Vector2( 170, 0 )
+
+[node name="SpawnPosition_03" type="Position2D" parent="EnemySpawner/SpawnPositions"]
+position = Vector2( 270, 0 )
+
+[node name="SpawnPosition_04" type="Position2D" parent="EnemySpawner/SpawnPositions"]
+position = Vector2( 370, 0 )
+
+[node name="SpawnPosition_05" type="Position2D" parent="EnemySpawner/SpawnPositions"]
+position = Vector2( 470, 0 )
+
+[node name="SpawnTimer" type="Timer" parent="EnemySpawner"]
+wait_time = 2.0
+autostart = true
+
+[node name="DeathZone" type="Area2D" parent="."]
+position = Vector2( 267, -385 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeathZone"]
+position = Vector2( 1, -2.5 )
+scale = Vector2( 35.2, 10 )
+shape = SubResource( 1 )
+
+[node name="DeathZone2" type="Area2D" parent="."]
+position = Vector2( 267, 1250 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DeathZone2"]
+position = Vector2( 1, -22 )
+scale = Vector2( 35.2, 10 )
+shape = SubResource( 1 )
+
+[node name="EffectsLayer" type="Node2D" parent="."]
+
+[node name="Explosion" parent="EffectsLayer" instance=ExtResource( 11 )]
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="UILayer" instance=ExtResource( 8 )]
+
+[connection signal="player_died" from="Player" to="." method="_on_Player_player_died"]
+[connection signal="player_took_damage" from="Player" to="." method="_on_Player_player_took_damage"]
+[connection signal="spawn_laser" from="Player" to="." method="spawn_laser"]
+[connection signal="spawn_enemy" from="EnemySpawner" to="." method="_on_EnemySpawner_spawn_enemy"]
+[connection signal="timeout" from="EnemySpawner/SpawnTimer" to="EnemySpawner" method="_on_SpawnTimer_timeout"]
+[connection signal="area_entered" from="DeathZone" to="." method="_on_DeathZone_area_entered"]
+[connection signal="area_entered" from="DeathZone2" to="." method="_on_DeathZone_area_entered"]

@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/star-shooter-assets/player.png" type="Texture" id=1]
+[ext_resource path="res://Player.gd" type="Script" id=2]
+[ext_resource path="res://assets/star-shooter-assets/sfx_laser1.wav" type="AudioStream" id=3]
+[ext_resource path="res://assets/star-shooter-assets/hit.wav" type="AudioStream" id=4]
+
+[node name="Player" type="Area2D"]
+script = ExtResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.75, 0.75 )
+texture = ExtResource( 1 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2( -48, -3 )
+polygon = PoolVector2Array( 35, 25, 39, 31, 57, 31, 60, 26, 60, 25, 76, 29, 90, 8, 89, 6, 83, 3, 82, 4, 60, -8, 58, -11, 56, -12, 51, -25, 45, -25, 39, -12, 37, -10, 36, -8, 14, 4, 13, 3, 6, 6, 6, 9, 19, 29 )
+
+[node name="Muzzle" type="Position2D" parent="."]
+
+[node name="HitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+
+[node name="LaserSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+
+[connection signal="area_entered" from="." to="." method="_on_Player_area_entered"]
